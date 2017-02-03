@@ -178,7 +178,7 @@
     f <- as.formula(f)
     f
     
-    #1st and 2nd layers all 5 nodes
+    #1st and 2nd layers all 6 nodes
     train.nn <- neuralnet(f, train_nn, hidden=c(6,6), linear.output=FALSE) 
     train.nn
     
