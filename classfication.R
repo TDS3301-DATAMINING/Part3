@@ -95,8 +95,8 @@
 ### D. PERFORMANCE OF 3 CLASSIFIER
   
   # ~~~ 1. Decision tree ~~~
-  library(tree)
-  train.tree <- tree::tree(Occupancy ~ . -date, train)
+    library(tree)
+    train.tree <- tree::tree(Occupancy ~ . -date, train)
     
     # list the rules
     train.tree
@@ -125,9 +125,7 @@
     
     
   # ~~~ 2. Naive bayes ~~~
-    
     # Feature selection
-    
       # use seed to ensure results are repeatable
       set.seed(123)
       
@@ -156,8 +154,6 @@
       plot(results, type=c("g", "o"))
     
     # Execution
-      
-      # load library
       library(e1071)
       
       # create formula using the predictors name
@@ -181,8 +177,6 @@
       train.naive.accuracy # 0.9774859  
       
   # ~~~ 3. Artificial nueral networks ~~~
-    
-    # load library
     library(neuralnet)
     
     # convert to formula
