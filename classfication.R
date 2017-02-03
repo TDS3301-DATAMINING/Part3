@@ -113,7 +113,7 @@
     train.tree.confusion <- table(train.tree.pred, test$Occupancy)
     train.tree.confusion
     
-    # compute the accuracy, TPR and FPR
+    # compute the accuracy
     train.tree.accuracy <- sum(diag(train.tree.confusion)) / sum(train.tree.confusion)
     train.tree.accuracy # 0.9786116
     
@@ -163,7 +163,7 @@
       train.naive.confusion <- table(train.naive.prediction, test$Occupancy)
       train.naive.confusion
     
-      # compute the accuracy, TPR and FPR
+      # compute the accuracy
       train.naive.accuracy <- sum(diag(train.naive.confusion)) / sum(train.naive.confusion)
       train.naive.accuracy # 0.9774859  
       
@@ -198,7 +198,7 @@
     train.nn.confusion <- table(test_nn$Occupancy,train.nn.predict$net.result)
     train.nn.confusion
     
-    # compute the accuracy, TPR and FPR
+    # compute the accuracy
     train.nn.accuracy <- sum(diag(train.nn.confusion)) / sum(train.nn.confusion)
     train.nn.accuracy # 0.9789868668
     
@@ -206,20 +206,29 @@
     plot(train.nn)
     
   # ~~~ ROC graph with multiple curves ~~~
-  library(pROC)
-  
-  # Decision, AUC = 0.983
+  library(ROCR)
+
   predict1 <- as.numeric(as.character(train.tree.prediction))
-  roc <- plot(roc(test$Occupancy, predict1), print.auc = T, col = "red", 
-              main="ROC", xlab="False Positive Rate", ylab="True Positive Rate")
-
-  # Naive, AUC = 0.981
   predict2 <- as.numeric(as.character(train.naive.prediction))
-  roc <- plot(roc(test$Occupancy, predict2), print.auc = T, col = "green",
-              print.auc.y = .4, add = T)
-
-  # ANN, AUC = 0.984
   predict3 <- as.vector(train.nn.predict$net.result)
-  roc <- plot(roc(test_nn$Occupancy, predict3), print.auc = T, col = "blue",
-              print.auc.y = .3, add = T)
-
+  
+  performance.tree <- performance(prediction(predict1, test$Occupancy), "tpr", "fpr" )
+  performance.naive <- performance(prediction(predict2, test$Occupancy), "tpr", "fpr" )
+  performance.nn <- performance(prediction(predict3, test_nn$Occupancy), "tpr", "fpr" )
+  
+  plot(performance.tree, col="red", colorize=F, main="ROC")
+  plot(performance.naive, add=T, col="green")
+  plot(performance.nn, add=T, col = "blue")  
+  
+  lines(performance.tree@x.values[[1]], performance.tree@y.values[[1]], col="red")
+  lines(performance.naive@x.values[[1]], performance.naive@y.values[[1]], col="green")
+  lines(performance.nn@x.values[[1]], performance.nn@y.values[[1]], col="blue")
+  
+  legend('right', c("Decision Tree", "Naive Bayes", "Neural Networks"), lty=1,
+         lwd=2, col=c("red", "green", "blue"), bty="n")
+  
+  # Get the AUC
+  auc(test$Occupancy, predict1) # auc.tree = 0.9825088
+  auc(test$Occupancy, predict2) # auc.naive = 0.9811846
+  auc(test_nn$Occupancy, predict3) # auc.nn = 0.9840015
+  
