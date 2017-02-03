@@ -84,13 +84,6 @@
   train <- train[ , c(1,8,2:7)]
   test <- test[ , c(1,8,2:7)]
   test2 <- test2[ , c(1,8,2:7)]
-  
-  # review the structure again
-  str(train_nn)
-  str(test_nn)
-  str(train)
-  str(test)
-  str(test2)
 
 ### D. PERFORMANCE OF 3 CLASSIFIER
   
@@ -113,7 +106,8 @@
     text(train.tree,pretty=0)
     
     # test the tree
-    train.tree.pred <- predict(train.tree, test, type="class")
+    train.tree.prediction <- predict(train.tree, test, type="class")
+    train.tree.prediction
     
     # confusion matrix
     train.tree.confusion <- table(train.tree.pred, test$Occupancy)
@@ -143,9 +137,6 @@
       # from the training data and identify the features required to build an accurate model
       results <- rfe(train[,2:7], train[,8], sizes=c(2:7), rfeControl=control)
       
-      # summarize the results
-      print(results)
-      
       # list the chosen features and store into a variable
       predictors(results) # Light, CO2, Temperature
       train.predictors <- train[predictors(results)]
@@ -172,7 +163,7 @@
       train.naive.confusion <- table(train.naive.prediction, test$Occupancy)
       train.naive.confusion
     
-      # compute the accuracy
+      # compute the accuracy, TPR and FPR
       train.naive.accuracy <- sum(diag(train.naive.confusion)) / sum(train.naive.confusion)
       train.naive.accuracy # 0.9774859  
       
@@ -214,14 +205,21 @@
     # plot ann
     plot(train.nn)
     
-    # plot ROC and compute the AUC
-    library(ROCR)
-    predict <- as.vector(train.nn.predict$net.result)
-    pred <- prediction(predict,test_nn$Occupancy)
-    roc = performance(pred, "tpr", "fpr")
-    plot(roc, lwd=2, colorize=TRUE)
-    lines(x=c(0, 1), y=c(0, 1), col="black", lwd=1)
-    auc = performance(pred, "auc")
-    auc = unlist(auc@y.values)
-    auc # 0.9840015411
-    
+  # ~~~ ROC graph with multiple curves ~~~
+  library(pROC)
+  
+  # Decision, AUC = 0.983
+  predict1 <- as.numeric(as.character(train.tree.prediction))
+  roc <- plot(roc(test$Occupancy, predict1), print.auc = T, col = "red", 
+              main="ROC", xlab="False Positive Rate", ylab="True Positive Rate")
+
+  # Naive, AUC = 0.981
+  predict2 <- as.numeric(as.character(train.naive.prediction))
+  roc <- plot(roc(test$Occupancy, predict2), print.auc = T, col = "green",
+              print.auc.y = .4, add = T)
+
+  # ANN, AUC = 0.984
+  predict3 <- as.vector(train.nn.predict$net.result)
+  roc <- plot(roc(test_nn$Occupancy, predict3), print.auc = T, col = "blue",
+              print.auc.y = .3, add = T)
+
