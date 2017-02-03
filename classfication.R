@@ -92,10 +92,6 @@
   str(test)
   str(test2)
 
-### C. CHOICE OF PERFORMANCE MEASURES
-
-
-
 ### D. PERFORMANCE OF 3 CLASSIFIER
   
   # ~~~ 1. Decision tree ~~~
