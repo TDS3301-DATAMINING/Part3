@@ -10,6 +10,9 @@ The dataset choosen for this classification task is the occupancy detection data
 
 As plotted in the graph above, it is shown that there is some heavy outliers in both Light and CO2 attibutes. Besides that, there is also slight outliers found in humidity ratio and occupancy. 
 
+## B. Pre-Processing tasks
+
+
 ## C. Choice of performance measures
 
 In this classification task, we are using ROC to measure each and every performance of the model used to perform classification on the dataset, which is decision tree, naive bayes and artificial neural network. In order to construct an ROC curve 4 values which are true positive, false positive, true negative and false negative is calculated. After that, those value are used to calculate the true positive rate and false positive rate which finally leads to plotting the ROC curve itself.
@@ -17,3 +20,7 @@ In this classification task, we are using ROC to measure each and every performa
 ![solarized symmetry](https://github.com/TDS3301-DATAMINING/Part3/blob/master/graphs/roc.png)
 
 
+## D. Performance of the 3 classifiers
+
+
+## E. Suggestion as to why the classifiers behave differently 
