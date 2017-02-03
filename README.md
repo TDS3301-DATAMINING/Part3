@@ -86,6 +86,10 @@ In this classification task, we are using ROC to measure each and every performa
     
     # get the confusion matrix
     train.tree.confusion <- table(train.tree.pred, test$Occupancy)
+    train.tree.confusion
+         0    1
+    0 1639    3
+    1   54  969
      
     # compute the accuracy
     train.tree.accuracy <- sum(diag(train.tree.confusion)) / sum(train.tree.confusion)
@@ -108,6 +112,9 @@ In this classification task, we are using ROC to measure each and every performa
     # get the confusion matrix
     train.naive.confusion <- table(train.naive.prediction, test$Occupancy)
     train.naive.confusion
+         0    1
+    0 1638    5
+    1   55  967
     
     # compute the accuracy
     train.naive.accuracy <- sum(diag(train.naive.confusion)) / sum(train.naive.confusion)
@@ -136,6 +143,9 @@ In this classification task, we are using ROC to measure each and every performa
     # get the confusion matrix
     train.nn.confusion <- table(test_nn$Occupancy,train.nn.predict$net.result)
     train.nn.confusion
+         0    1
+    0 1638   55
+    1    1  971
                                              
     # compute the accuracy
     train.nn.accuracy <- sum(diag(train.nn.confusion)) / sum(train.nn.confusion)
@@ -160,7 +170,7 @@ plot(performance.naive, add=T, col="green")
 plot(performance.nn, add=T, col = "blue")  
 
 lines(performance.tree@x.values[[1]], performance.tree@y.values[[1]], col="red")
-lines(performance.naive@x.values[[1]], performance.naive@y.values[[1]], col="green")
+ lines(performance.naive@x.values[[1]], performance.naive@y.values[[1]], col="green")
 lines(performance.nn@x.values[[1]], performance.nn@y.values[[1]], col="blue")
 
 legend('right', c("Decision Tree", "Naive Bayes", "Neural Networks"), lty=1,
@@ -180,3 +190,27 @@ auc(test_nn$Occupancy, predict3) # auc.nn = 0.9840015
 ```
 
 ## E. Suggestion as to why the classifiers behave differently 
+
+* Decision Tree
+```
+1. Decision tree is similar to human decision process.
+2. Decision tree deal with both discrete and continuous features.
+```
+
+* Naive Bayes
+```
+1. Naive bayes takes independent assumptions between the features.
+2. Naive bayes support missing values.
+```
+
+* Neural Networks
+```
+1. Neural networks only deals with numeric data.
+2. Neural networks doesn't require feature selection.
+```
+
+** Conclusion **
+
+All the three classifiers scored an accuracy of > 90% and very close to each others.  
+Decision tree score the highest accuracy among the tree, follow by neural networks and naive bayes.  
+Weight settings and number of nodes in the hidden layer of neural networks is the thing to take note as it will affect the result of the accuracy.  
