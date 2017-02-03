@@ -6,7 +6,7 @@ You can access the dataset at this [link](https://archive.ics.uci.edu/ml/dataset
 
 The dataset choosen for this classification task is the occupancy detection data set. There is a total number of 7 attributes in the dataset which is temperature, relative humidity, light , CO2 , humidity ratio and occupancy. The dataset obtained from the source website is in three txt files where each of the files serves as purposes like training of the model, and the test data to test the model to see whether the model can classify the data correctly. The key attribute is temperature, light and CO2 for this task.
 
-![solarized symmetry](https://github.com/altercation/solarized/raw/master/img/solarized-sym.png)
+![solarized symmetry](https://github.com/TDS3301-DATAMINING/Part3/blob/master/outliers.PNG)
 
 As plotted in the graph above, it is shown that there is some heavy outliers in both Light and CO2 attibutes. Besides that, there is also slight outliers found in humidity ratio and occupancy. 
 
