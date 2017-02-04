@@ -6,17 +6,14 @@
   # load data
   train <- read.table("occupancy_data/datatraining.txt", sep=",", header=T)
   test <- read.table("occupancy_data/datatest.txt", sep=",", header=T)
-  test2 <- read.table("occupancy_data/datatest2.txt", sep=",", header=T)
   
   # reviewing the structure of the training set and testing set
   str(train)
   str(test)
-  str(test2)
   
   # check for missing value
   sum(is.na(train)) # 0
   sum(is.na(test)) # 0
-  sum(is.na(test2)) # 0
   
   # check for outliers
   boxplot(train)
@@ -50,41 +47,46 @@
   # convert $date column as POSIXct format
   train$date <- as.POSIXct(train$date,tz="UTC") 
   test$date <- as.POSIXct(test$date,tz="UTC") 
-  test2$date <- as.POSIXct(test2$date,tz="UTC") 
   
   # discretize the $date column
   train$WeekStatus <-unlist(lapply(train$date, checkWeekStatus))
   test$WeekStatus <-unlist(lapply(test$date, checkWeekStatus))
-  test2$WeekStatus <-unlist(lapply(test2$date, checkWeekStatus))
   
   # relevel $WeekStatus to 0=weekend 1=weekday
   train$WeekStatus <-unlist(lapply(train$WeekStatus, relevelWeekStatus))
   test$WeekStatus <-unlist(lapply(test$WeekStatus, relevelWeekStatus))
-  test2$WeekStatus <-unlist(lapply(test2$WeekStatus, relevelWeekStatus))
   
-  # for nueral network
-  train_nn <- train[,2:8]
-  test_nn <- test[,2:8]
+  # reorder the columns
+  train <- train[ , c(1,8,2:7)]
+  test <- test[ , c(1,8,2:7)]
+  
+  # scale data for nueral network
+  train.maxs <- apply(train[,2:8], 2, max)
+  train.mins <- apply(train[,2:8], 2, min)
+  train.scaled <- as.data.frame(scale(train[,2:8], center = train.mins, scale = train.maxs - train.mins))
+  
+  test.maxs <- apply(train[,2:8], 2, max)
+  test.mins <- apply(train[,2:8], 2, min)
+  test.scaled <- as.data.frame(scale(train[,2:8], center = train.mins, scale = train.maxs - train.mins))
+  
+  train_nn <- train.scaled
+  test_nn <- test.scaled
   train_nn$Occupancy <- as.numeric(train_nn$Occupancy)
   test_nn$Occupancy <- as.numeric(test_nn$Occupancy)
   
   # convert $WeekStatus column as factor
   train$WeekStatus <- as.factor(train$WeekStatus)
   test$WeekStatus <- as.factor(test$WeekStatus)
-  test2$WeekStatus <- as.factor(test2$WeekStatus)
   
   # convert $occupancy column as factor
   train$Occupancy <- as.factor(train$Occupancy)
   test$Occupancy <- as.factor(test$Occupancy)
-  test2$Occupancy <- as.factor(test2$Occupancy)
-  
-  # reorder the columns
-  train_nn <- train_nn[ , c(7,1:6)]
-  test_nn <- test_nn[ , c(7,1:6)]
-  train <- train[ , c(1,8,2:7)]
-  test <- test[ , c(1,8,2:7)]
-  test2 <- test2[ , c(1,8,2:7)]
 
+  str(train)
+  str(test)
+  str(train_nn)
+  str(test_nn)
+  
 ### D. PERFORMANCE OF 3 CLASSIFIER
   
   # ~~~ 1. Decision tree ~~~

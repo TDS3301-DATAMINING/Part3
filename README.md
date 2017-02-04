@@ -64,6 +64,23 @@ test$WeekStatus <-unlist(lapply(test$WeekStatus, relevelWeekStatus))
 test2$WeekStatus <-unlist(lapply(test2$WeekStatus, relevelWeekStatus))
 ```
 
+* Then normalize the train data & test data for neural network.
+```R
+# scale data for nueral network
+train.maxs <- apply(train[,2:8], 2, max)
+train.mins <- apply(train[,2:8], 2, min)
+train.scaled <- as.data.frame(scale(train[,2:8], center = train.mins, scale = train.maxs - train.mins))
+
+test.maxs <- apply(train[,2:8], 2, max)
+test.mins <- apply(train[,2:8], 2, min)
+test.scaled <- as.data.frame(scale(train[,2:8], center = train.mins, scale = train.maxs - train.mins))
+
+train_nn <- train.scaled
+test_nn <- test.scaled
+train_nn$Occupancy <- as.numeric(train_nn$Occupancy)
+test_nn$Occupancy <- as.numeric(test_nn$Occupancy)
+```
+
 ## C. Choice of performance measures
 
 In this classification task, we are using ROC to measure each and every performance of the model used to perform classification on the dataset, which is decision tree, naive bayes and artificial neural network. In order to construct an ROC curve 4 values which are true positive, false positive, true negative and false negative is calculated. After that, those value are used to calculate the true positive rate and false positive rate which finally leads to plotting the ROC curve itself.
@@ -170,7 +187,7 @@ plot(performance.naive, add=T, col="green")
 plot(performance.nn, add=T, col = "blue")  
 
 lines(performance.tree@x.values[[1]], performance.tree@y.values[[1]], col="red")
- lines(performance.naive@x.values[[1]], performance.naive@y.values[[1]], col="green")
+lines(performance.naive@x.values[[1]], performance.naive@y.values[[1]], col="green")
 lines(performance.nn@x.values[[1]], performance.nn@y.values[[1]], col="blue")
 
 legend('right', c("Decision Tree", "Naive Bayes", "Neural Networks"), lty=1,
@@ -205,12 +222,12 @@ auc(test_nn$Occupancy, predict3) # auc.nn = 0.9840015
 
 * Neural Networks
 ```
-1. Neural networks only deals with numeric data.
-2. Neural networks doesn't require feature selection.
+1. Neural network takes only numeric input.
+2. Backpropagation can be used to update each of the weights in the network to minimize the error.
 ```
 
 ** Conclusion **
 
 All the three classifiers scored an accuracy of > 90% and very close to each others.  
 Decision tree score the highest accuracy among the tree, follow by neural networks and naive bayes.  
-Weight settings and number of nodes in the hidden layer of neural networks is the thing to take note as it will affect the result of the accuracy.  
+Weight settings and number of nodes in the hidden layer of neural networks is the thing to take note as it will affect the result of the accuracy. The activation function of a node also defines the output of that node given an input or set of inputs.
