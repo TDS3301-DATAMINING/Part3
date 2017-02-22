@@ -83,7 +83,7 @@ test_nn$Occupancy <- as.numeric(test_nn$Occupancy)
 
 ## C. Choice of performance measures
 
-In this classification task, we are using ROC to measure each and every performance of the model used to perform classification on the dataset, which is decision tree, naive bayes and artificial neural network. In order to construct an ROC curve 4 values which are true positive, false positive, true negative and false negative is calculated. After that, those value are used to calculate the true positive rate and false positive rate which finally leads to plotting the ROC curve itself.
+In this classification task, we are using ROC to measure each and every performance of the model used to perform classification on the dataset, which is decision tree, naive bayes and artificial neural network. In order to construct an ROC curve, we need to know the value for true positive, false positive, true negative and false negative. After that, those value are used to calculate the true positive rate (TPR) and false positive rate (FPR) which finally leads to plotting the ROC curve itself.
 
 ![solarized symmetry](https://github.com/TDS3301-DATAMINING/Part3/blob/master/graphs/roc.png)
 
