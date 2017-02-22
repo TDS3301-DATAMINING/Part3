@@ -8,7 +8,7 @@ The dataset choosen for this classification task is the occupancy detection data
 
 ![solarized symmetry](https://github.com/TDS3301-DATAMINING/Part3/blob/master/graphs/outliers.PNG)
 
-As plotted in the graph above, it is shown that there is some heavy outliers in both Light and CO2 attibutes. Besides that, there is also slight outliers found in humidity ratio and occupancy. 
+As plotted in the graph above, it is shown that there is some heavy outliers in both Light and CO2 attibutes. Besides that, there is also slight outliers found in humidity ratio and occupancy attributes. 
 
 ## B. Pre-Processing tasks
 
